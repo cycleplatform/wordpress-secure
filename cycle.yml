@@ -1,0 +1,59 @@
+version: "1.0"
+description: "Secure Wordpress Stack for Cycle"
+containers:
+  db:
+    name: "MariaDB"
+    image:
+      name: "MariaDB"
+      preload: false
+      source:
+        docker_hub:
+          target: "mariadb:latest"
+    volumes:
+      -
+        destination: /bitnami
+        local:
+          max_size: 20G
+        readonly: false
+        remote_access:
+          enable: false
+    config:
+      deployment:
+        instances: 1
+      runtime:
+        environment_vars:
+          MYSQL_ROOT_PASSWORD: test
+      network:
+        hostname: "db"
+        public: "disable"
+        ports:
+          - "3306"
+      options:
+        monitor:
+          auto_restart: true
+          max_restarts: 3
+          notify:
+            emails:
+              - amattoni@cycle.io
+
+  wordpress:
+    name: "Wordpress"
+    image: 
+      name: "Wordpress"
+      preload: false
+      source:
+        docker_hub:
+          target: "cycleplatform/wordpress:latest"
+    config:
+      deployment:
+        instances: 1
+      runtime:
+        environment_vars:
+          WORDPRESS_DB_HOST: db
+          WORDPRESS_DB_PASSWORD: test
+      network:
+        hostname: wordpress
+        public: "enable"
+        ports:
+          - "80:80"
+          - "443:443"
