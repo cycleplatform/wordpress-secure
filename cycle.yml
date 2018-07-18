@@ -54,6 +54,8 @@ containers:
       network:
         hostname: wordpress
         public: "enable"
+        tls:
+          enable: true
         ports:
           - "80:80"
           - "443:443"
