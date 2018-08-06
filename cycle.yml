@@ -9,14 +9,6 @@ containers:
       source:
         docker_hub:
           target: "mariadb:latest"
-    volumes:
-      -
-        destination: /bitnami
-        local:
-          max_size: 20G
-        readonly: false
-        remote_access:
-          enable: false
     config:
       deployment:
         instances: 1
