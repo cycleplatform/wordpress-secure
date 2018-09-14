@@ -25,4 +25,5 @@ EXPOSE 443
 ENV SSL_ENABLED 1
 
 COPY startup.sh /usr/local
+RUN chmod +x /usr/local/startup.sh
 ENTRYPOINT ["/bin/bash", "-c", "/usr/local/startup.sh"]
