@@ -2,8 +2,11 @@ FROM wordpress:latest
 
 COPY default-ssl.conf /etc/apache2/sites-available 
 RUN ln -s /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf 
+VOLUME /var/www/html
 
-COPY .htaccess /var/www/html 
+# Copy it so we can link/unlink depending on SSL settings
+COPY .htaccess /usr/local
+RUN ln -s /usr/local/.htaccess /var/www/html/.htaccess
 
 RUN ln -s /etc/apache2/mods-available/ssl.load /etc/apache2/mods-enabled/ssl.load 
 
@@ -16,6 +19,10 @@ RUN echo "memory_limit = 150M\n" \
          "post_max_size = 150M\n" \
          > /usr/local/etc/php/conf.d/uploads.ini
          
-VOLUME /var/www/html
 
 EXPOSE 443
+
+ENV SSL_ENABLED 1
+
+COPY startup.sh /usr/local
+ENTRYPOINT ["/bin/bash", "-c", "/usr/local/startup.sh"]
