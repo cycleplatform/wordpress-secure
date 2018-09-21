@@ -6,10 +6,15 @@ then
     unlink /etc/apache2/mods-enabled/ssl.load
     unlink /etc/apache2/mods-enabled/ssl.conf
     unlink /etc/apache2/mods-enabled/socache_shmcb.load
-    unlink /var/www/html/.htaccess
+    
+    if cmp -s /var/www/html/.htaccess /usr/local/.htaccess; then
+        unlink /var/www/html/.htaccess
+    fi
 else
     echo "Using SSL configuration"
-    ln -s /usr/local/.htaccess /var/www/html/.htaccess
+    if [ ! -f /var/www/html/.htaccess]; then
+        ln -s /usr/local/.htaccess /var/www/html/.htaccess
+    fi
 fi
 
 /usr/local/bin/docker-entrypoint.sh apache2-foreground
