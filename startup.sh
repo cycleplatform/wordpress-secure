@@ -1,5 +1,5 @@
 # Undo SSL config if not enabled:
-if [ "$SSL_ENABLED" = "0" ]
+if [ "$CYCLE_FEATURES_TLS_ENABLED" == "0" ]
 then
     echo "SSL_ENABLED env variable set to 0, disabling SSL config"
     unlink /etc/apache2/sites-enabled/default-ssl.conf
